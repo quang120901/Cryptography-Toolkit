@@ -8,6 +8,7 @@ from gui.sidebar import Sidebar
 from gui.page_symmetric import SymmetricPage
 from gui.page_asymmetric import AsymmetricPage
 from gui.page_hash import HashPage
+import functions as func
 
 
 class App(tk.Tk):
@@ -37,10 +38,11 @@ class App(tk.Tk):
 
         # ── Wire up buttons (controller) ──────────────────────
         # TODO: Gán các hàm crypto vào đây sau khi implement logic
-        # Ví dụ:
-        #   sym = self._pages["sym"]
-        #   sym.btn_encrypt.config(command=lambda: controller.sym_encrypt(sym))
-        #   sym.btn_gen_key.config(command=lambda: controller.gen_key(sym))
+        
+        sym = self._pages["sym"]
+        sym.btn_encrypt.config(command=lambda: func.sym_encrypt(sym))
+        sym.btn_gen_key.config(command=lambda: func.gen_sym_key(sym))
+        sym.btn_dec_decrypt.config(command=lambda: func.sym_decrypt(sym))
 
         # ── Show trang đầu ────────────────────────────────────
         self._sidebar.activate("sym")

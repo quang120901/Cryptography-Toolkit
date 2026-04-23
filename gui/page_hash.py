@@ -16,8 +16,8 @@ class HashPage(tk.Frame):
 
     # ── Public references (controller sẽ dùng) ────────────────
     # Input       : self.txt_input, self.hash_algo_var
-    # Buttons     : self.btn_hash, self.btn_hash_both
-    # Result boxes: self.md5_result, self.sha_result
+    # Buttons     : self.btn_hash
+    # Result box  : self.hash_result
 
     def _build(self):
         # ── Input card ────────────────────────────────────────
@@ -52,44 +52,22 @@ class HashPage(tk.Frame):
         btn_row = tk.Frame(self, bg=PANEL)
         btn_row.pack(pady=14)
 
-        self.btn_hash = make_btn(btn_row, "# Hash Ngay",
+        self.btn_hash = make_btn(btn_row, "# Hash",
                                  command=lambda: None,   # ← controller gán sau
-                                 color=ACCENT2, width=18)
+                                 color=ACCENT, width=18)
         self.btn_hash.pack(side="left", padx=4)
-
-        self.btn_hash_both = make_btn(btn_row, "↩  Hash Cả Hai",
-                                      command=lambda: None,   # ← controller gán sau
-                                      color=ACCENT, width=16)
-        self.btn_hash_both.pack(side="left", padx=4)
 
         make_btn(btn_row, "✕  Xoá", command=self._clear,
                  color=DANGER, width=10).pack(side="left", padx=4)
 
-        # ── Result boxes ──────────────────────────────────────
+        # ── Result box ────────────────────────────────────────
         res = tk.Frame(self, bg=PANEL)
-        res.pack(fill="both", expand=True, padx=24, pady=(0, 8))
+        res.pack(fill="both", expand=True, padx=24, pady=(0, 20))
 
-        md5_f = tk.Frame(res, bg=PANEL)
-        md5_f.pack(fill="x", pady=(0, 10))
-        make_label(md5_f, "MD5  (128-bit / 32 hex chars)",
-                   bg=PANEL, fg=MUTED, font=FONT_LABEL).pack(anchor="w")
-        self.md5_result = ResultBox(md5_f, self.winfo_toplevel(), "")
-        self.md5_result.pack(fill="x")
-
-        sha_f = tk.Frame(res, bg=PANEL)
-        sha_f.pack(fill="x")
-        make_label(sha_f, "SHA-256  (256-bit / 64 hex chars)",
-                   bg=PANEL, fg=MUTED, font=FONT_LABEL).pack(anchor="w")
-        self.sha_result = ResultBox(sha_f, self.winfo_toplevel(), "")
-        self.sha_result.pack(fill="x")
-
-        # ── Note ──────────────────────────────────────────────
-        make_label(self,
-                   "ℹ  MD5 chỉ dùng cho mục đích học thuật — không an toàn trong thực tế.",
-                   bg=PANEL, fg=MUTED, font=FONT_LABEL).pack(pady=(8, 12))
+        self.hash_result = ResultBox(res, self.winfo_toplevel(), "Hash Value (Digest)")
+        self.hash_result.pack(fill="both", expand=True)
 
     # ── Clear helper ──────────────────────────────────────────
     def _clear(self):
         self.txt_input.delete("1.0", "end")
-        self.md5_result.clear()
-        self.sha_result.clear()
+        self.hash_result.clear()

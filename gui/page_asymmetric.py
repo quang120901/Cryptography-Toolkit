@@ -4,7 +4,7 @@ import tkinter as tk
 from gui.theme import *
 from gui.widgets import (
     make_label, make_textarea, make_btn,
-    make_combo, make_card, make_divider,
+    make_card, make_divider,
     ResultBox, TabBar,
 )
 
@@ -15,7 +15,7 @@ class AsymmetricPage(tk.Frame):
         self._build()
 
     # ── Public references (controller sẽ dùng) ─────────────────
-    # Key section  : self.bits_var, self.btn_gen_keys, self.pub_box, self.priv_box
+    # Key section  : self.btn_gen_keys, self.pub_box, self.priv_box
     # Encrypt tab  : self.rsa_pt_input, self.rsa_pubkey_input, self.btn_rsa_encrypt
     # Decrypt tab  : self.rsa_ct_input, self.rsa_privkey_input, self.btn_rsa_decrypt
     # Result boxes : self.rsa_enc_result, self.rsa_dec_result
@@ -29,12 +29,6 @@ class AsymmetricPage(tk.Frame):
         hdr.pack(fill="x", padx=10, pady=(10, 6))
 
         make_label(kf, "RSA Key Pair", font=FONT_HEAD).pack(in_=hdr, side="left")
-
-        make_label(hdr, "Bit size:", bg=CARD, fg=MUTED,
-                   font=FONT_LABEL).pack(side="right", padx=(0, 4))
-        self.bits_var = tk.StringVar(value="2048")
-        make_combo(hdr, ["1024", "2048", "4096"],
-                   textvariable=self.bits_var, width=6).pack(side="right")
 
         self.btn_gen_keys = make_btn(kf, "⚡  Tạo Key Pair Ngẫu Nhiên",
                                      command=lambda: None,   # ← controller gán sau
@@ -83,8 +77,7 @@ class AsymmetricPage(tk.Frame):
         self.rsa_pt_input = make_textarea(c, height=3, mono=False)
         self.rsa_pt_input.pack(fill="x", padx=10, pady=(0, 6))
 
-        make_label(c, "Public Key (PEM) — để trống để dùng key vừa tạo",
-                   fg=MUTED, font=FONT_LABEL).pack(anchor="w", padx=10, pady=(6, 2))
+        make_label(c, "Public Key (PEM)").pack(anchor="w", padx=10, pady=(6, 2))
         self.rsa_pubkey_input = make_textarea(c, height=4, mono=True)
         self.rsa_pubkey_input.pack(fill="x", padx=10, pady=(0, 10))
 
@@ -115,8 +108,7 @@ class AsymmetricPage(tk.Frame):
         self.rsa_ct_input = make_textarea(c, height=3, mono=True)
         self.rsa_ct_input.pack(fill="x", padx=10, pady=(0, 6))
 
-        make_label(c, "Private Key (PEM) — để trống để dùng key vừa tạo",
-                   fg=MUTED, font=FONT_LABEL).pack(anchor="w", padx=10, pady=(6, 2))
+        make_label(c, "Private Key (PEM)").pack(anchor="w", padx=10, pady=(6, 2))
         self.rsa_privkey_input = make_textarea(c, height=4, mono=True)
         self.rsa_privkey_input.pack(fill="x", padx=10, pady=(0, 10))
 

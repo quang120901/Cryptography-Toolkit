@@ -25,17 +25,21 @@ class SymmetricPage(tk.Frame):
         ctrl = tk.Frame(self, bg=PANEL)
         ctrl.pack(fill="x", padx=24, pady=(20, 8))
 
-        make_label(ctrl, "Thuật toán:", bg=PANEL, fg=MUTED,
-                   font=FONT_LABEL).pack(side="left")
+        make_label(ctrl, "Thuật toán:", bg=PANEL, fg=TEXT,
+                   font=FONT_BODY).pack(side="left")
         self.algo_var = tk.StringVar(value="AES")
-        make_combo(ctrl, ["AES", "3DES", "DES"],
-                   textvariable=self.algo_var, width=8).pack(side="left", padx=(6, 20))
+        algo_combo = make_combo(ctrl, ["AES", "3DES", "DES"],
+                                textvariable=self.algo_var, width=8)
+        algo_combo.config(font=("Segoe UI", 11))
+        algo_combo.pack(side="left", padx=(6, 20))
 
-        make_label(ctrl, "Mode:", bg=PANEL, fg=MUTED,
-                   font=FONT_LABEL).pack(side="left")
+        make_label(ctrl, "Mode:", bg=PANEL, fg=TEXT,
+                   font=FONT_BODY).pack(side="left")
         self.mode_var = tk.StringVar(value="CBC")
-        make_combo(ctrl, ["CBC", "ECB"],
-                   textvariable=self.mode_var, width=6).pack(side="left", padx=6)
+        mode_combo = make_combo(ctrl, ["CBC", "ECB"],
+                                textvariable=self.mode_var, width=6)
+        mode_combo.config(font=("Segoe UI", 11))
+        mode_combo.pack(side="left", padx=6)
 
         # ── Tab bar ───────────────────────────────────────────
         self._tabbar = TabBar(self, on_switch=self._switch_tab)

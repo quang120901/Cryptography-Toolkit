@@ -65,6 +65,9 @@ def make_combo(parent, values, textvariable=None, **kw):
                     fieldbackground=BTN_BG, background=BTN_BG,
                     foreground=TEXT, selectforeground=TEXT,
                     selectbackground=BTN_BG, arrowcolor=ACCENT)
+    style.map("Dark.TCombobox",
+              fieldbackground=[("readonly", BTN_BG)],
+              selectbackground=[("readonly", BTN_BG)])
     return ttk.Combobox(
         parent, values=values,
         textvariable=textvariable,

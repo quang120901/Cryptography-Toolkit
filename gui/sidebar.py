@@ -17,7 +17,7 @@ class Sidebar(tk.Frame):
         # ── Logo ──────────────────────────────────────────────
         tk.Label(self, text="🔐", bg=PANEL,
                  font=("Segoe UI", 28)).pack(pady=(24, 2))
-        tk.Label(self, text="Crypto", bg=PANEL, fg=ACCENT,
+        tk.Label(self, text="Cryptography", bg=PANEL, fg=ACCENT,
                  font=("Segoe UI", 16, "bold")).pack()
         tk.Label(self, text="Toolkit", bg=PANEL, fg=TEXT,
                  font=("Segoe UI", 11)).pack()

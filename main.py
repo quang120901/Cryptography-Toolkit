@@ -43,7 +43,10 @@ class App(tk.Tk):
         sym.btn_encrypt.config(command=lambda: func.sym_encrypt(sym))
         sym.btn_gen_key.config(command=lambda: func.gen_sym_key(sym))
         sym.btn_dec_decrypt.config(command=lambda: func.sym_decrypt(sym))
+        hash_page = self._pages["hash"]
 
+        hash_page.btn_hash.config(command=lambda: func.hash_now(hash_page))
+        
         # ── Show trang đầu ────────────────────────────────────
         self._sidebar.activate("sym")
 

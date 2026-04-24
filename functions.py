@@ -1,3 +1,4 @@
+import hashlib
 
 def sym_encrypt(page):
     """
@@ -58,18 +59,19 @@ def rsa_decrypt(page):
 
 
 def hash_now(page):
-    """
-    Lấy dữ liệu:
-        text = page.txt_input.get("1.0", "end").strip()
-        algo = page.hash_algo_var.get()   # "MD5" | "SHA-256"
-    
-    Trả kết quả:
-        page.md5_result.set(...)
-        page.sha_result.set(...)
-    """
+    text = page.txt_input.get("1.0", "end").strip()
+    algo = page.hash_algo_var.get()
+
+    if not text:
+        page.hash_result.set("Input rỗng")
+        return
+
+    if algo == "MD5":
+        result = hashlib.md5(text.encode()).hexdigest()
+    else:
+        result = hashlib.sha256(text.encode()).hexdigest()
+
+    page.hash_result.set(result)
     pass
 
 
-def hash_both(page):
-    """Tính cả MD5 lẫn SHA-256 cùng lúc."""
-    pass

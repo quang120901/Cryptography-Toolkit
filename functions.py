@@ -1,7 +1,10 @@
+import base64
 import hashlib
 import os
 
 from Crypto.Cipher import DES, DES3, AES
+from Crypto.Cipher import PKCS1_OAEP
+from Crypto.PublicKey import RSA
 from Crypto.Util.Padding import pad, unpad
 
 # ── Bảng ánh xạ thuật toán → module + kích thước key/block ──────────────
@@ -183,24 +186,91 @@ def _update_key_hint(page, algo):
 
 def rsa_gen_keys(page):
     """
-    Lấy dữ liệu:
-        bits = int(page.bits_var.get())
-    
-    Trả kết quả:
-        page.pub_box.set(public_key_pem)
-        page.priv_box.set(private_key_pem)
+    Sinh RSA key pair 2048-bit, hiển thị PEM lên GUI
+    và tự điền vào ô encrypt/decrypt để test nhanh.
     """
-    pass
+    try:
+        key = RSA.generate(2048)
+        public_key_pem = key.publickey().export_key().decode("utf-8")
+        private_key_pem = key.export_key().decode("utf-8")
+
+        page.pub_box.set(public_key_pem, color="#10b981")
+        page.priv_box.set(private_key_pem, color="#10b981")
+
+        page.rsa_pubkey_input.delete("1.0", "end")
+        page.rsa_pubkey_input.insert("1.0", public_key_pem)
+
+        page.rsa_privkey_input.delete("1.0", "end")
+        page.rsa_privkey_input.insert("1.0", private_key_pem)
+
+    except Exception as e:
+        page.pub_box.set(f"Lỗi tạo public key: {e}", color="#ef4444")
+        page.priv_box.set(f"Lỗi tạo private key: {e}", color="#ef4444")
 
 
 def rsa_encrypt(page):
-    """..."""
-    pass
+    plaintext = page.rsa_pt_input.get("1.0", "end").strip()
+    public_key_pem = page.rsa_pubkey_input.get("1.0", "end").strip()
+
+    if not plaintext:
+        page.rsa_enc_result.set("Plaintext không được để trống!", color="#ef4444")
+        return
+
+    if not public_key_pem:
+        page.rsa_enc_result.set("Public key không được để trống!", color="#ef4444")
+        return
+
+    try:
+        public_key = RSA.import_key(public_key_pem)
+        cipher = PKCS1_OAEP.new(public_key)
+        ciphertext = cipher.encrypt(plaintext.encode("utf-8"))
+        ciphertext_b64 = base64.b64encode(ciphertext).decode("utf-8")
+        page.rsa_enc_result.set(ciphertext_b64, color="#10b981")
+    except ValueError as e:
+        page.rsa_enc_result.set(
+            f"Mã hoá RSA thất bại: {e}\n"
+            "Gợi ý: plaintext có thể quá dài cho RSA 2048 + OAEP.",
+            color="#ef4444"
+        )
+    except Exception as e:
+        page.rsa_enc_result.set(f"Lỗi mã hoá RSA: {e}", color="#ef4444")
 
 
 def rsa_decrypt(page):
-    """..."""
-    pass
+    ciphertext_b64 = page.rsa_ct_input.get("1.0", "end").strip()
+    private_key_pem = page.rsa_privkey_input.get("1.0", "end").strip()
+
+    if not ciphertext_b64:
+        page.rsa_dec_result.set("Ciphertext không được để trống!", color="#ef4444")
+        return
+
+    if not private_key_pem:
+        page.rsa_dec_result.set("Private key không được để trống!", color="#ef4444")
+        return
+
+    try:
+        ciphertext = base64.b64decode(ciphertext_b64, validate=True)
+    except Exception:
+        page.rsa_dec_result.set("Ciphertext phải là Base64 hợp lệ!", color="#ef4444")
+        return
+
+    try:
+        private_key = RSA.import_key(private_key_pem)
+        cipher = PKCS1_OAEP.new(private_key)
+        plaintext = cipher.decrypt(ciphertext).decode("utf-8")
+        page.rsa_dec_result.set(plaintext, color="#10b981")
+    except ValueError as e:
+        page.rsa_dec_result.set(
+            f"Giải mã RSA thất bại — sai key hoặc dữ liệu bị hỏng.\n({e})",
+            color="#ef4444"
+        )
+    except UnicodeDecodeError:
+        page.rsa_dec_result.set(
+            "Giải mã thành công nhưng plaintext không phải UTF-8 hợp lệ.",
+            color="#ef4444"
+        )
+    except Exception as e:
+        page.rsa_dec_result.set(f"Lỗi giải mã RSA: {e}", color="#ef4444")
 
 
 
